@@ -100,8 +100,8 @@ config.vm.define "server" do |server|
 
 
   server.vm.provision "shell",
-    name: "Setup zfs",
-    path: "setup_zfs.sh"
+    name: "Setup nfs",
+    path: "setup_nfs.sh"
   end
   
   # Cent OS 8.2
@@ -115,6 +115,10 @@ config.vm.define "server" do |server|
       vb.memory = "1024"
       vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     end
+    server.vm.provision "shell",
+    name: "Setup nfs1",
+    path: "setup_nfs1.sh"
+     end
   end
 
 end
