@@ -15,17 +15,6 @@ server.vm.provider "virtualbox" do |vb|
     vb.memory = "512"
     vb.name = "server"
   end
-#  server.ssh.username = "vagrant"
- # server.ssh.password = "vagrant"
-#  server.vm.provision "shell", inline: <<-SHELL
-#  vagrant plugin update vagrant-vbguest
-#  SHELL
-#  server.vm.provision "shell", inline: <<-SHELL
-#				mkdir -p ~root/.ssh
-#				cp ~vagrant/.ssh/auth* ~root/.ssh
-#			SHELL
- # server.vm.provision "file", source: "nfs_server.sh", destination: "/home/vagrant/nfs_server.sh"
- # server.vm.provision "shell", inline: "/home/nfs_server.sh"
    server.vm.provision "shell", inline: <<-SHELL
 sudo su
  systemctl start nfs-server
@@ -35,9 +24,12 @@ sudo su
  chmod o+rw /var/upload
  echo "/var/upload *(rw)" >> /etc/exports
  exportfs -var
+ mkdir /var/upload1
+ touch /var/upload1/ROman
+ chmod o+rw /var/upload1
+ echo "/var/upload1 *(rw)" >> /etc/exports
+ exportfs -var
  systemctl restart nfs-server
-# touch file222 /var/upload/
-# touch file333 /var/upload/
 SHELL
 end
 config.vm.define "client" do |client|
@@ -54,23 +46,17 @@ config.vm.define "client" do |client|
       vb1.memory = "512"
       vb1.name = "client"
   end
-#  client.ssh.username = "vagrant"
-#  client.ssh.password = "vagrant"
-
-#  client.vm.provision "shell", inline: <<-SHELL
-#  vagrant plugin update vagrant-vbguest
-#  SHELL
  client.vm.provision "shell", inline: <<-SHELL
 sudo su
   mkdir /mnt/upload
   mount -t nfs 192.168.1.10:/var/upload /mnt/upload
  touch /mnt/upload/Bendin
+ mkdir /mnt/upload1
+ mount -t nfs 192.168.1.10:/var/upload1 /mnt/upload1 -o udp
+ touch /mnt/upload1/BEndin
                         SHELL
 
 
- # client.vm.provision "file", source: "nfs_client.sh", destination: "/home/vagrant/nfs_client.sh"
- # client.vm.provision "shell", inline: "/home/nfs_client.sh"
 end
-  #  mkdir /mnt/upload
- #  mount -t nfs 192.168.1.1:/var/upload /mnt/upload
+
 end
