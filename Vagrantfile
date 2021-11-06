@@ -8,7 +8,7 @@ Vagrant.configure("2") do |config|
   server.vm.ignore_box_vagrantfile = true
   server.vm.synced_folder ".", "/vagrant", disabled: true
   server.vm.hostname = "server"
-  server.vm.network "private_network", ip: "192.168.1.10", netmask: "24", virtual_box_intnet: "mynetwork"
+  server.vm.network "private_network", ip: "192.168.1.10"
 server.vm.provider "virtualbox" do |vb|
     vb.cpus = 1
     vb.gui = true
@@ -45,7 +45,7 @@ config.vm.define "client" do |client|
   client.vm.ignore_box_vagrantfile = true
   client.vm.hostname = "client"
   client.vm.synced_folder ".", "/vagrant", disabled: true
-  client.vm.network "private_network", ip: "192.168.1.11", netmask: "24", virtual_box_intnet: "mynetwork"
+  client.vm.network "private_network", ip: "192.168.1.11"
   client.vm.network "forwarded_port", guest: 22, host: 2200
   client.vm.provider "virtualbox" do |vb1|
       vb1.cpus = 1
