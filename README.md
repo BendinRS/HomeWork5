@@ -35,6 +35,13 @@ sudo su
  chmod o+rw /var/upload1
  echo "/var/upload1 *(rw)" >> /etc/exports
  exportfs -var
+ systemctl start firewalld.service
+ firewall-cmd --permanent --zone=public --add-service=nfs
+ firewall-cmd --permanent --zone=public --add-service=mountd
+ firewall-cmd --permanent --zone=public --add-service=rpc-bind
+ firewall-cmd --permanent --zone=public --add-port=2049/tcp
+ firewall-cmd --permanent --zone=public --add-port=2049/udp 
+ systemctl restart firewalld.service
  systemctl restart nfs-server
 SHELL
 end
