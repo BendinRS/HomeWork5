@@ -1,17 +1,4 @@
-# -*- mode: ruby -*-
-# vim: set ft=ruby :
-
-Vagrant.configure("2") do |config|
-  config.vm.define "server" do |server|
-  server.vm.box = "centos/7"
-  server.vm.box_version = "1804.02"
-  server.vm.ignore_box_vagrantfile = true
-  server.vm.synced_folder ".", "/vagrant", disabled: true
-  server.vm.hostname = "server"
-  server.vm.network "private_network", ip: "192.168.1.10"
-server.vm.provider "virtualbox" do |vb|
-    vb.cpus = 1
-  #  vb.gui = true
+#  vb.gui = true
     vb.memory = "512"
     vb.name = "server"
   end
@@ -29,6 +16,13 @@ sudo su
  chmod o+rw /var/upload1
  echo "/var/upload1 *(rw)" >> /etc/exports
  exportfs -var
+ systemctl start firewalld.service
+ firewall-cmd --permanent --zone=public --add-service=nfs
+ firewall-cmd --permanent --zone=public --add-service=mountd
+ firewall-cmd --permanent --zone=public --add-service=rpc-bind
+ firewall-cmd --permanent --zone=public --add-port=2049/tcp
+ firewall-cmd --permanent --zone=public --add-port=2049/udp 
+ systemctl restart firewalld.service
  systemctl restart nfs-server
 SHELL
 end
