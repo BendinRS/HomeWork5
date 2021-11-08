@@ -29,7 +29,6 @@ sudo su
  chmod o+rw /var/upload1
  echo "/var/upload1 *(rw)" >> /etc/exports
  exportfs -var
- systemctl start firewalld.service
  systemctl restart nfs-server
 SHELL
 end
